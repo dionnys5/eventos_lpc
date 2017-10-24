@@ -2,30 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Pessoa(models.Model):
-    nome = models.CharField(max_length=128)
-    descricao = models.TextField()
-    data_nascimento = models.DateField(blank=True, null=True)
-    usuario = models.OneToOneField(User)
-
-    def __str__(self):
-        return self.nome
-    
-
-class PessoaFisica(Pessoa):
-    cpf = models.CharField(max_length=11)
-    
-    class Meta:
-        verbose_name = 'Pessoa Fisica'
-        verbose_name_plural = 'Pessoas Fisicas'
-
     
 class Evento(models.Model):
     nome = models.CharField(max_length=128)
     descricao = models.TextField()
     sigla = models.CharField(max_length=10)
     ano = models.IntegerField()
-    realizador = models.ForeignKey(PessoaFisica, related_name='realizadores', null=True, blank=False)
+    realizador = models.ForeignKey(User, related_name='realizadores', null=True, blank=False)
     logo = models.ImageField()
     data_inicio = models.DateTimeField()
     data_fim = models.DateTimeField()
@@ -46,7 +29,7 @@ class Ticket(models.Model):
         verbose_name_plural = 'Tickets'
 
 class Inscricao(models.Model):
-    participante = models.ForeignKey(PessoaFisica, related_name='participantes', null=True, blank=False)
+    participante = models.ForeignKey(User, related_name='participantes', null=True, blank=False)
     festa_evento = models.ForeignKey(Evento, related_name='participantes', null=True, blank=False)
     ticket = models.ForeignKey(Ticket, null=True, blank=False)
     status = models.BooleanField()

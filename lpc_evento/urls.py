@@ -19,9 +19,10 @@ from rest_framework import routers, serializers, viewsets
 from eventos.views import *
 
 router = routers.DefaultRouter()
-router.register(r'user', UserViewSet)
+router.register(r'user',UserViewSet)
+router.register(r'pessoa', PessoaViewSet)
 router.register(r'evento', EventoViewSet)
-router.register(r'ticket',TicketViewSet)
+router.register(r'ticket', TicketViewSet)
 router.register(r'inscricao',InscricaoViewSet)
 
 urlpatterns = [

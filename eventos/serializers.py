@@ -1,29 +1,44 @@
 from rest_framework import routers, serializers, viewsets
 from django.contrib.auth.models import User
-from eventos.models import Evento, Ticket, Inscricao
+from eventos.models import *
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url','username','email','is_staff')
+        fields = ('username','email','is_staff', 'url')
+
+class PessoaSerializer(serializers.HyperlinkedModelSerializer):
+    usuario = UserSerializer(many=False)
+    class Meta:
+        model = Pessoa
+        fields = '__all__'
+    def create(self, data):
+        usuario = data.pop('usuario')
+        user = User.objects.create(**usuario)
+        pessoa = Pessoa.objects.create(usuario=user, **data)
+        return pessoa
 
 class EventoSerializer(serializers.HyperlinkedModelSerializer):
-    realizador = UserSerializer(many = False)
     class Meta:
         model = Evento
         fields = '__all__'
+    def create(self, data):
+        evento = Evento.objects.create(**data)
+        return evento
 
 class TicketSerializer(serializers.HyperlinkedModelSerializer):
-    evento = EventoSerializer(many = False)
     class Meta:
         model = Ticket
         fields = '__all__'
+    def create(self, data):
+        ticket = Ticket.objects.create(**data)
+        return ticket
 
 class InscricaoSerializer(serializers.HyperlinkedModelSerializer):
-    participante = UserSerializer(many = False)
-    festa_evento = EventoSerializer(many = False)
-    ticket = TicketSerializer(many = False)
     class Meta:
         model = Inscricao
         fields = '__all__'
+    def create(self, data):
+        inscricao = Inscricao.objects.create(**data)
+        return inscricao
 

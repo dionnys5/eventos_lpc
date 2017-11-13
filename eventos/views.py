@@ -7,6 +7,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class PessoaViewSet(viewsets.ModelViewSet):
+    queryset = Pessoa.objects.all()
+    serializer_class = PessoaSerializer
+
+
 class EventoViewSet(viewsets.ModelViewSet):
     queryset = Evento.objects.all()
     serializer_class = EventoSerializer
